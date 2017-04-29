@@ -6,6 +6,7 @@ This is a fairly simple Terraform example that can generate as many EC2 instance
   - Need to have zero installation on client machines (no software, no open ports, etc.)  Must run in browser.
   - Low cost.
   - Easy to setup before class starts.
+  - Provide a continuous integration machine for class demos.
 
 # Design 
 To meet these goals, the decision was made to run on AWS EC2 instances.  These instances are treated as Infrastructure as Code (hence this project).  As written, the instances run Ubuntu 16.04.  There is not a publically available AWS AMI that includes the Ubuntu Desktop.  This project provisions a complete desktop, along with IntelliJ for students to easily write and debug code with.
@@ -27,7 +28,7 @@ AMI used.
  ```
 6. You should see things such as 
 ```
-Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
 
 The state of your infrastructure has been saved to the path
 below. This state is required to modify and destroy your
@@ -38,28 +39,32 @@ State path:
 
 Outputs:
 
-addresses = [
-    ec2-54-152-234-84.compute-1.amazonaws.com
+jenkins_address = [
+    ec2-34-203-188-4.compute-1.amazonaws.com
+]
+student_addresses = [
+    ec2-54-164-91-148.compute-1.amazonaws.com
 ]
 ```
-6. Transfer all output addressess into infrastructure.feature for 
+7. Transfer all output addressess into infrastructure.feature for 
 testing, as well as for informing students of what their machine's
 URL will be.  On the command line, test the infrastrusture with 
 ```
 mvn test
 ```
-7. Students log on to their machine at port 8080 and a guacamole uri.
+8. Students log on to their machine at port 8080 and a guacamole uri.
 For example, a student would point their browser to
 ```
 http://ec2-54-152-234-84.compute-1.amazonaws.com:8080/guacamole
 ```
-8. Log on with USERNAME and PASSWORD.
-9. When the infrastructure is no longer needed, destroy the 
+9. Log on with USERNAME and PASSWORD.
+10. It is assumed that you know how to use and configure Jenkins.  Point your browser to the URL:8080 created and provisioned by Terraform.  You will have to ssh into the Jenkins server once to supply the secret password to the browser.
+11. When the infrastructure is no longer needed, destroy the 
 infrastructure on the command line with
 ```
 terraform destroy
 ```
-10. You will have to type in "yes" and should see things like:
+12. You will have to type in "yes" and should see things like:
 ```
 Do you really want to destroy?
   Terraform will delete all your managed infrastructure.
@@ -67,21 +72,25 @@ Do you really want to destroy?
 
   Enter a value: yes
 
-aws_security_group.aec_sg: Refreshing state... (ID: sg-bddd3fc3)
-aws_instance.ec2_aec: Refreshing state... (ID: i-064c9e4939a7aae9b)
-aws_instance.ec2_aec: Destroying... (ID: i-064c9e4939a7aae9b)
-aws_instance.ec2_aec: Still destroying... (ID: i-064c9e4939a7aae9b, 10s elapsed)
-aws_instance.ec2_aec: Still destroying... (ID: i-064c9e4939a7aae9b, 20s elapsed)
-aws_instance.ec2_aec: Still destroying... (ID: i-064c9e4939a7aae9b, 30s elapsed)
-aws_instance.ec2_aec: Destruction complete
-aws_security_group.aec_sg: Destroying... (ID: sg-bddd3fc3)
-aws_security_group.aec_sg: Destruction complete
+aws_security_group.aec_sg_jenkins: Refreshing state... (ID: sg-15e70d6b)
+aws_security_group.aec_sg_student: Refreshing state... (ID: sg-03fb117d)
+aws_instance.ec2_aec_student: Refreshing state... (ID: i-00d626d0324de0037)
+aws_instance.ec2_aec_jenkins: Refreshing state... (ID: i-0bd3159a4218f6e7a)
+aws_instance.ec2_aec_student: Destroying... (ID: i-00d626d0324de0037)
+aws_instance.ec2_aec_jenkins: Destroying... (ID: i-0bd3159a4218f6e7a)
+aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-0bd3159a4218f6e7a, 10s elapsed)
+aws_instance.ec2_aec_student: Still destroying... (ID: i-00d626d0324de0037, 10s elapsed)
+aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-0bd3159a4218f6e7a, 20s elapsed)
+aws_instance.ec2_aec_student: Still destroying... (ID: i-00d626d0324de0037, 20s elapsed)
+aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-0bd3159a4218f6e7a, 30s elapsed)
+aws_instance.ec2_aec_student: Still destroying... (ID: i-00d626d0324de0037, 30s elapsed)
+aws_instance.ec2_aec_student: Still destroying... (ID: i-00d626d0324de0037, 40s elapsed)
+aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-0bd3159a4218f6e7a, 40s elapsed)
+aws_instance.ec2_aec_student: Destruction complete
+aws_security_group.aec_sg_student: Destroying... (ID: sg-03fb117d)
+aws_security_group.aec_sg_student: Destruction complete
+aws_instance.ec2_aec_jenkins: Destruction complete
+aws_security_group.aec_sg_jenkins: Destroying... (ID: sg-15e70d6b)
+aws_security_group.aec_sg_jenkins: Destruction complete
 
-Destroy complete! Resources: 2 destroyed.
-```
-
-# TODO
-1) Reconfigure tomcat8 to use port 80 and the root directory.
-2) Provision each machine to have more appropriate username/password combinations.
-3) Preconfigure IntelliJ to point to the JDK installed on the machine.
- 
+Destroy complete! Resources: 4 destroyed.```
