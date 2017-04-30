@@ -47,10 +47,70 @@ student_addresses = [
     ec2-34-201-113-103.compute-1.amazonaws.com
 ]
 ```
-7. Transfer all output addressess into infrastructure.feature for 
-testing, as well as for informing students of what their machine's
-URL will be.  You can always use the following terraform commands when the
-infrastructure is terraformed:
+7. Integrated automated testing of the infrastructure is built into the system.
+To test, from the command line, enter
+```
+mvn
+```
+8. Cucumber feature files will be built in the validate exec:java phase and run in the test phase.
+You should see results of the tests, such as
+```
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.siq.aec.TestRunner
+Feature: Agile Engineering Course Infrastructure as Code for Jenkins Machine
+
+  Scenario Outline: Check connectivity    # InfrastructureJenkins.feature:3
+    When I look at "<aecJenkinsInstance>"
+    Then there should be ssh connectivity
+    And there should be smtp connectivity
+    And there should be http connectivity
+
+    Examples: 
+
+  Scenario Outline: Check connectivity                          # InfrastructureJenkins.feature:12
+    When I look at "ec2-54-146-181-140.compute-1.amazonaws.com" # Stepdefs.i_look_at(String)
+    Then there should be ssh connectivity                       # Stepdefs.there_should_be_ssh_connectivity()
+    And there should be smtp connectivity                       # Stepdefs.there_should_be_smtp_connectivity()
+    And there should be http connectivity                       # Stepdefs.there_should_be_http_connectivity()
+Feature: Agile Engineering Course Infrastructure as Code for Student Machines
+
+  Scenario Outline: Check connectivity     # InfrastructureStudent.feature:3
+    When I look at "<aecStudentInstance>"
+    Then there should be ssh connectivity
+    And there should be vnc connectivity
+    And there should be guacd connectivity
+    And there should be http connectivity
+
+    Examples: 
+
+  Scenario Outline: Check connectivity                        # InfrastructureStudent.feature:13
+    When I look at "ec2-54-172-9-163.compute-1.amazonaws.com" # Stepdefs.i_look_at(String)
+    Then there should be ssh connectivity                     # Stepdefs.there_should_be_ssh_connectivity()
+    And there should be vnc connectivity                      # Stepdefs.there_should_be_vnc_connectivity()
+    And there should be guacd connectivity                    # Stepdefs.there_should_be_guacd_connectivity()
+    And there should be http connectivity                     # Stepdefs.there_should_be_http_connectivity()
+
+  Scenario Outline: Check connectivity                          # InfrastructureStudent.feature:14
+    When I look at "ec2-52-201-223-223.compute-1.amazonaws.com" # Stepdefs.i_look_at(String)
+    Then there should be ssh connectivity                       # Stepdefs.there_should_be_ssh_connectivity()
+    And there should be vnc connectivity                        # Stepdefs.there_should_be_vnc_connectivity()
+    And there should be guacd connectivity                      # Stepdefs.there_should_be_guacd_connectivity()
+    And there should be http connectivity                       # Stepdefs.there_should_be_http_connectivity()
+
+3 Scenarios (3 passed)
+14 Steps (14 passed)
+0m1.777s
+
+Tests run: 17, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.195 sec
+
+Results :
+
+Tests run: 17, Failures: 0, Errors: 0, Skipped: 0
+```
+9. Use the following terraform commands to aid in the creation of
+eMails, etc.:
 ```
 Howards-Mac:aec-infrastructure howarddeiner$ terraform output jenkins_address
 ec2-34-201-111-228.compute-1.amazonaws.com
@@ -58,23 +118,19 @@ Howards-Mac:aec-infrastructure howarddeiner$ terraform output student_addresses
 ec2-54-234-29-7.compute-1.amazonaws.com,
 ec2-34-201-113-103.compute-1.amazonaws.com
 ```
-8. Test the infrastructure.  On the command line, test the infrastrusture with 
-```
-mvn test
-```
-8. Students log on to their machine at port 8080 and a guacamole uri.
+10. Students log on to their machine at port 8080 and a guacamole uri.
 For example, a student would point their browser to
 ```
 http://ec2-54-152-234-84.compute-1.amazonaws.com:8080/guacamole
 ```
-9. Log on with USERNAME and PASSWORD.
-10. It is assumed that you know how to use and configure Jenkins.  Point your browser to the URL:8080 created and provisioned by Terraform.  You will have to ssh into the Jenkins server once to supply the secret password to the browser.
-11. When the infrastructure is no longer needed, destroy the 
+11. Log on with USERNAME and PASSWORD.
+12. It is assumed that you know how to use and configure Jenkins.  Point your browser to the URL:8080 created and provisioned by Terraform.  You will have to ssh into the Jenkins server once to supply the secret password to the browser.
+13. When the infrastructure is no longer needed, destroy the 
 infrastructure on the command line with
 ```
 terraform destroy
 ```
-12. You will have to type in "yes" and should see things like:
+14. You will have to type in "yes" and should see things like:
 ```
 Do you really want to destroy?
   Terraform will delete all your managed infrastructure.
