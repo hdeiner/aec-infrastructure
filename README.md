@@ -26,9 +26,9 @@ AMI used.
  ```
  terraform apply
  ```
-6. You should see things such as 
+6. After a whole lot of provisioning, you should see things such as the following.  This was run with two student instances being created. 
 ```
-Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 
 The state of your infrastructure has been saved to the path
 below. This state is required to modify and destroy your
@@ -40,15 +40,25 @@ State path:
 Outputs:
 
 jenkins_address = [
-    ec2-34-203-188-4.compute-1.amazonaws.com
+    ec2-34-201-111-228.compute-1.amazonaws.com
 ]
 student_addresses = [
-    ec2-54-164-91-148.compute-1.amazonaws.com
+    ec2-54-234-29-7.compute-1.amazonaws.com,
+    ec2-34-201-113-103.compute-1.amazonaws.com
 ]
 ```
 7. Transfer all output addressess into infrastructure.feature for 
 testing, as well as for informing students of what their machine's
-URL will be.  On the command line, test the infrastrusture with 
+URL will be.  You can always use the following terraform commands when the
+infrastructure is terraformed:
+```
+Howards-Mac:aec-infrastructure howarddeiner$ terraform output jenkins_address
+ec2-34-201-111-228.compute-1.amazonaws.com
+Howards-Mac:aec-infrastructure howarddeiner$ terraform output student_addresses
+ec2-54-234-29-7.compute-1.amazonaws.com,
+ec2-34-201-113-103.compute-1.amazonaws.com
+```
+8. Test the infrastructure.  On the command line, test the infrastrusture with 
 ```
 mvn test
 ```

@@ -27,6 +27,11 @@ public class Stepdefs {
         assertThat(netstatHasSshOpen(), is(true));
     }
 
+    @Then("^there should be smtp connectivity$")
+    public void there_should_be_smtp_connectivity() throws Throwable {
+        assertThat(netstatHasSmtpOpen(), is(true));
+    }
+
     @Then("^there should be vnc connectivity$")
     public void there_should_be_vnc_connectivity() throws Throwable {
         assertThat(netstatHasVncOpen(), is(true));
@@ -53,7 +58,7 @@ public class Stepdefs {
 
         String s = null;
         while ((s = stdInput.readLine()) != null) {
-            System.out.println(s);
+//            System.out.println(s);
             output.add(s);
         }
 
@@ -68,6 +73,14 @@ public class Stepdefs {
         boolean result = false;
         for (String s : remoteNetstatResults) {
             result |= s.matches("^tcp\\s*\\d*\\s*\\d*\\s*0\\.0\\.0\\.0\\:22\\s*0\\.0\\.0\\.0\\:\\*\\s*LISTEN\\s*\\d*\\/sshd.*$");
+        }
+        return result;
+    }
+
+    private boolean netstatHasSmtpOpen() {
+        boolean result = false;
+        for (String s : remoteNetstatResults) {
+            result |= s.matches("^tcp\\s*\\d*\\s*\\d*\\s*0\\.0\\.0\\.0\\:25\\s*0\\.0\\.0\\.0\\:\\*\\s*LISTEN\\s*\\d*\\/master.*$");
         }
         return result;
     }
