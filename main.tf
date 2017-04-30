@@ -103,7 +103,7 @@ resource "aws_instance" "ec2_aec_jenkins" {
     script = "provisionJenkins.sh"
   }
   tags {
-    Name = "Agile Engineering Class Jenkins Instance}"
+    Name = "Agile Engineering Class Jenkins Instance"
   }
 }
 
