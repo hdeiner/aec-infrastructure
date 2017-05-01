@@ -32,57 +32,95 @@ resource "aws_security_group" "aec_sg_jenkins" {
   name = "agile_engineering_class_jenkins"
   description = "Agile Engineering Class - Jenkins SMTP and SSH Access"
   ingress {
-    protocol    = "tcp"
-    from_port   = 22
-    to_port     = 22
-    cidr_blocks = ["0.0.0.0/0"]
+    protocol = "tcp"
+    from_port = 22
+    to_port = 22
+    cidr_blocks = [
+      "0.0.0.0/0"]
   }
   ingress {
-    protocol    = "tcp"
-    from_port   = 25
-    to_port     = 25
-    cidr_blocks = ["0.0.0.0/0"]
+    protocol = "tcp"
+    from_port = 25
+    to_port = 25
+    cidr_blocks = [
+      "0.0.0.0/0"]
   }
   ingress {
-    protocol    = "tcp"
-    from_port   = 8080
-    to_port     = 8080
-    cidr_blocks = ["0.0.0.0/0"]
+    protocol = "tcp"
+    from_port = 8080
+    to_port = 8080
+    cidr_blocks = [
+      "0.0.0.0/0"]
   }
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = [
+      "0.0.0.0/0"]
   }
   tags {
     Name = "Agile Engineering Class Jenkins"
   }
 }
 
+resource "aws_security_group" "aec_sg_gitlab" {
+  name = "agile_engineering_class_gitlab"
+  description = "Agile Engineering Class - GitLab SMTP and SSH Access"
+  ingress {
+    protocol = "tcp"
+    from_port = 22
+    to_port = 22
+    cidr_blocks = [
+      "0.0.0.0/0"]
+  }
+  ingress {
+    protocol = "tcp"
+    from_port = 25
+    to_port = 25
+    cidr_blocks = [
+      "0.0.0.0/0"]
+  }
+  ingress {
+    protocol = "tcp"
+    from_port = 80
+    to_port = 80
+    cidr_blocks = [
+      "0.0.0.0/0"]
+  }
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = [
+      "0.0.0.0/0"]
+  }
+  tags {
+    Name = "Agile Engineering Class GitLab"
+  }
+}
+
 resource "aws_instance" "ec2_aec_student" {
-  count           = 2
-  ami             = "ami-80861296"
-  instance_type   = "m4.large"
-  key_name        = "aws_linux"
-  security_groups = [ "${aws_security_group.aec_sg_student.name}" ]
+  count = 2
+  ami = "ami-80861296"
+  instance_type = "m4.large"
+  key_name = "aws_linux"
+  security_groups = ["${aws_security_group.aec_sg_student.name}"]
   provisioner "remote-exec" {
     connection {
-      type        = "ssh",
-      user        = "ubuntu",
+      type = "ssh",
+      user = "ubuntu",
       private_key = "${file("~/.ssh/aws_linux.pem")}"
     }
     script = "provisionGuacamole.sh"
-  }
+    }
   provisioner "remote-exec" {
     connection {
-      type        = "ssh",
-      user        = "ubuntu",
+      type = "ssh",
+      user = "ubuntu",
       private_key = "${file("~/.ssh/aws_linux.pem")}"
     }
-    inline = [
-      "sudo reboot now"
-    ]
+    inline = ["sudo reboot now"]
   }
   tags {
     Name = "Agile Engineering Class Student Instance ${format("%03d", count.index)}"
@@ -90,14 +128,14 @@ resource "aws_instance" "ec2_aec_student" {
 }
 
 resource "aws_instance" "ec2_aec_jenkins" {
-  ami             = "ami-80861296"
-  instance_type   = "t2.micro"
-  key_name        = "aws_linux"
-  security_groups = [ "${aws_security_group.aec_sg_jenkins.name}" ]
+  ami = "ami-80861296"
+  instance_type = "t2.micro"
+  key_name = "aws_linux"
+  security_groups = ["${aws_security_group.aec_sg_jenkins.name}"]
   provisioner "remote-exec" {
     connection {
-      type        = "ssh",
-      user        = "ubuntu",
+      type = "ssh",
+      user = "ubuntu",
       private_key = "${file("~/.ssh/aws_linux.pem")}"
     }
     script = "provisionJenkins.sh"
@@ -107,9 +145,32 @@ resource "aws_instance" "ec2_aec_jenkins" {
   }
 }
 
+resource "aws_instance" "ec2_aec_gitlab" {
+  ami = "ami-80861296"
+  instance_type = "m4.large"
+  key_name = "aws_linux"
+  security_groups = ["${aws_security_group.aec_sg_gitlab.name}"]
+  provisioner "remote-exec" {
+    connection {
+      type = "ssh",
+      user = "ubuntu",
+      private_key = "${file("~/.ssh/aws_linux.pem")}"
+    }
+    script = "provisionGitLab.sh"
+  }
+  tags {
+    Name = "Agile Engineering Class GitLab Instance"
+  }
+}
+
 output "student_addresses" {
   value = ["${aws_instance.ec2_aec_student.*.public_dns}"]
 }
+
 output "jenkins_address" {
   value = ["${aws_instance.ec2_aec_jenkins.*.public_dns}"]
+}
+
+output "gitlab_address" {
+  value = ["${aws_instance.ec2_aec_gitlab.*.public_dns}"]
 }
