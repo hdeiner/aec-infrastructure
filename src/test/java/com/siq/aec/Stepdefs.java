@@ -42,9 +42,14 @@ public class Stepdefs {
         assertThat(netstatHasGuacdRunning(), is(true));
     }
 
-    @Then("^there should be http connectivity$")
-    public void there_should_be_http_connectivity() throws Throwable {
+    @Then("^there should be http8080 connectivity$")
+    public void there_should_be_http8080_connectivity() throws Throwable {
         assertThat(netstatHasTomcatOpen(), is(true));
+    }
+
+    @Then("^there should be http80 connectivity$")
+    public void there_should_be_http80_connectivity() throws Throwable {
+        assertThat(netstatHasHttpOpen(), is(true));
     }
 
     private List<String> runShellCommand(String[] command) throws IOException {
@@ -105,6 +110,13 @@ public class Stepdefs {
         boolean result = false;
         for (String s : remoteNetstatResults) {
             result |= s.matches("^tcp6\\s*\\d*\\s*\\d*\\s*:::8080\\s*:::\\*\\s*LISTEN\\s*\\d*\\/java.*$");
+        }
+        return result;
+    }
+    private boolean netstatHasHttpOpen() {
+        boolean result = false;
+        for (String s : remoteNetstatResults) {
+            result |= s.matches("^tcp\\s*\\d*\\s*\\d*\\s*0\\.0\\.0\\.0\\:80\\s*0\\.0\\.0\\.0\\:\\*\\s+LISTEN\\s+\\d+\\/\\S+.*$");
         }
         return result;
     }

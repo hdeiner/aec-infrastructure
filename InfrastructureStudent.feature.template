@@ -6,7 +6,7 @@ Feature: Agile Engineering Course Infrastructure as Code for Student Machines
     Then there should be ssh connectivity
     And there should be vnc connectivity
     And there should be guacd connectivity
-    And there should be http connectivity
+    And there should be http8080 connectivity
 
     Examples:
       |aecStudentInstance                        |

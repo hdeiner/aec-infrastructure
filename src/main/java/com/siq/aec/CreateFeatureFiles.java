@@ -13,35 +13,29 @@ import java.util.List;
 public class CreateFeatureFiles {
 
     public static void main(String[] args) throws IOException {
-        List<String> aecStudentInstances;
-        List<String> aecJenkinsInstances;
-
         String studentTemplateFile = "InfrastructureStudent.feature.template";
         String studentFeatureFile = "src/test/java/com/siq/aec/InfrastructureStudent.feature";
         String jenkinsTemplateFile = "InfrastructureJenkins.feature.template";
         String jenkinsFeatureFile = "src/test/java/com/siq/aec/InfrastructureJenkins.feature";
+        String gitlabTemplateFile = "InfrastructureGitlab.feature.template";
+        String gitlabFeatureFile = "src/test/java/com/siq/aec/InfrastructureGitlab.feature";
 
-        String[] cmd1 = {"/usr/local/bin/terraform", "output", "student_addresses"};
-        aecStudentInstances = runShellCommand(cmd1);
+        writeFeatureFileFromTemplate(studentTemplateFile, studentFeatureFile, "student_addresses");
+        writeFeatureFileFromTemplate(jenkinsTemplateFile, jenkinsFeatureFile, "jenkins_address");
+        writeFeatureFileFromTemplate(gitlabTemplateFile, gitlabFeatureFile, "gitlab_address");
+    }
 
-        Files.copy(Paths.get(studentTemplateFile), new FileOutputStream(studentFeatureFile));
-        for (String s : aecStudentInstances) {
+    private static void writeFeatureFileFromTemplate(String templateFile, String featureFile, String whichAddresses) throws IOException {
+        String[] cmd = {"/usr/local/bin/terraform", "output", whichAddresses};
+        List<String> instances = runShellCommand(cmd);
+
+        Files.copy(Paths.get(templateFile), new FileOutputStream(featureFile));
+        for (String s : instances) {
             if (s.endsWith(",")) {
                 s = s.substring(0,s.length()-1);
             }
             s = "|" + s + "|" + System.getProperty("line.separator");
-            Files.write(Paths.get(studentFeatureFile), s.getBytes(), StandardOpenOption.APPEND);
-        }
-        String[] cmd2 = {"/usr/local/bin/terraform", "output", "jenkins_address"};
-        aecJenkinsInstances = runShellCommand(cmd2);
-
-        Files.copy(Paths.get(jenkinsTemplateFile), new FileOutputStream(jenkinsFeatureFile));
-        for (String s : aecJenkinsInstances) {
-            if (s.endsWith(",")) {
-                s = s.substring(0,s.length()-1);
-            }
-            s = "|" + s + "|" + System.getProperty("line.separator");
-            Files.write(Paths.get(jenkinsFeatureFile), s.getBytes(), StandardOpenOption.APPEND);
+            Files.write(Paths.get(featureFile), s.getBytes(), StandardOpenOption.APPEND);
         }
     }
 
