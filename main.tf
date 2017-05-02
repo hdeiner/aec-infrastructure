@@ -101,7 +101,7 @@ resource "aws_security_group" "aec_sg_gitlab" {
 }
 
 resource "aws_instance" "ec2_aec_student" {
-  count = 2
+  count = 1
   ami = "ami-80861296"
   instance_type = "m4.large"
   key_name = "aws_linux"
