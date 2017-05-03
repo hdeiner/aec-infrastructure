@@ -10,7 +10,7 @@ resource "aws_instance" "ec2_aec_student" {
       user = "ubuntu",
       private_key = "${file("~/.ssh/aws_linux.pem")}"
     }
-    script = "provisionGuacamole.sh"
+    script = "provisionStudent.sh"
   }
   provisioner "remote-exec" {
     connection {

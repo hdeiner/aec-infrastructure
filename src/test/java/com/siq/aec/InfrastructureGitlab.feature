@@ -9,4 +9,4 @@ Feature: Agile Engineering Course Infrastructure as Code for Gitlab Machine
 
     Examples:
       |aecGitlabInstance                        |
-|ec2-54-209-61-143.compute-1.amazonaws.com|
+|ec2-54-226-81-65.compute-1.amazonaws.com|

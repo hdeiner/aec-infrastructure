@@ -144,6 +144,14 @@ wget https://download.jetbrains.com/idea/ideaIC-2017.1.1.tar.gz
 sudo tar -xvf ideaIC-2017.1.1.tar.gz -C /opt/
 sudo ln -s /opt/idea-IC-171.4073.35/bin/idea.sh /usr/local/sbin/intellij
 
+# Make Guacamole run on port 80
+# Port forward requests from outside
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
+# Port forward requests from localhost
+sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080
+sudo sh -c "iptables-save > /etc/iptables.rules"
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y iptables-persistent
+
 # Cleanup
 rm guacamole-server-0.9.12-incubating.tar.gz
 rm ideaIC-2017.1.1.tar.gz
