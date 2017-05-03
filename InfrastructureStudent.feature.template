@@ -1,6 +1,6 @@
 Feature: Agile Engineering Course Infrastructure as Code for Student Machines
 
-  Scenario Outline: Check connectivity
+  Scenario Outline: Check Student connectivity
 
     When I look at "<aecStudentInstance>"
     Then there should be ssh connectivity

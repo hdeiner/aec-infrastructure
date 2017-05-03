@@ -1,6 +1,6 @@
 Feature: Agile Engineering Course Infrastructure as Code for Jenkins Machine
 
-  Scenario Outline: Check connectivity
+  Scenario Outline: Check Jenkins connectivity
 
     When I look at "<aecJenkinsInstance>"
     Then there should be ssh connectivity

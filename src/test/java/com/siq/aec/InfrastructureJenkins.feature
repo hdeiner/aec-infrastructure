@@ -1,6 +1,6 @@
 Feature: Agile Engineering Course Infrastructure as Code for Jenkins Machine
 
-  Scenario Outline: Check connectivity
+  Scenario Outline: Check Jenkins connectivity
 
     When I look at "<aecJenkinsInstance>"
     Then there should be ssh connectivity
@@ -9,4 +9,4 @@ Feature: Agile Engineering Course Infrastructure as Code for Jenkins Machine
 
     Examples:
       |aecJenkinsInstance                        |
-|ec2-52-90-146-33.compute-1.amazonaws.com|
+|ec2-54-196-175-125.compute-1.amazonaws.com|

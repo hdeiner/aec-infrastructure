@@ -47,8 +47,8 @@ resource "aws_security_group" "aec_sg_jenkins" {
   }
   ingress {
     protocol = "tcp"
-    from_port = 8080
-    to_port = 8080
+    from_port = 80
+    to_port = 80
     cidr_blocks = [
       "0.0.0.0/0"]
   }
