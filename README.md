@@ -118,19 +118,20 @@ Howards-Mac:aec-infrastructure howarddeiner$ terraform output student_addresses
 ec2-54-234-29-7.compute-1.amazonaws.com,
 ec2-34-201-113-103.compute-1.amazonaws.com
 ```
-10. Students log on to their machine at port 8080 and a guacamole uri.
+10. Students log on to their machine at port 8080.
 For example, a student would point their browser to
 ```
-http://ec2-54-152-234-84.compute-1.amazonaws.com:8080/guacamole
+http://ec2-54-152-234-84.compute-1.amazonaws.com:8080
 ```
 11. Log on with USERNAME and PASSWORD.
-12. It is assumed that you know how to use and configure Jenkins.  Point your browser to the URL:8080 created and provisioned by Terraform.  You will have to ssh into the Jenkins server once to supply the secret password to the browser.
-13. When the infrastructure is no longer needed, destroy the 
+12. It is assumed that you know how to use and configure Jenkins.  Point your browser to the URL created and provisioned by Terraform.  You will have to ssh into the Jenkins server once to supply the secret password to the browser to unlock Jenkins.
+13. It is also assumed that you know how to use and configure GitLab.  Point your browser to the URL created and provisioned by Terraform.  
+14. When the infrastructure is no longer needed, destroy the 
 infrastructure on the command line with
 ```
 terraform destroy
 ```
-14. You will have to type in "yes" and should see things like:
+15. You will have to type in "yes" and should see things like:
 ```
 Do you really want to destroy?
   Terraform will delete all your managed infrastructure.
