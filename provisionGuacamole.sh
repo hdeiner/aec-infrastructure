@@ -65,6 +65,8 @@ cd ..
 # Move files to correct locations
 sudo mv guacamole-0.9.12-incubating.war /etc/guacamole/guacamole.war
 sudo ln -s /etc/guacamole/guacamole.war /var/lib/tomcat8/webapps/
+sudo rm -rf /var/lib/tomcat8/webapps/ROOT
+sudo mv /var/lib/tomcat8/webapps/guacamole.war /var/lib/tomcat8/webapps/ROOT.war
 sudo ln -s /usr/local/lib/freerdp/* /usr/lib/x86_64-linux-gnu/freerdp/.
 
 sudo rm -rf /usr/share/tomcat8/.guacamole
@@ -82,7 +84,7 @@ sudo apt-get -y install tightvncserver
 # Install xfece4 (until ubuntu-desktop works)
 sudo apt-get -y install xfce4 xfce4-goodies
 sudo apt-get -y install gnome-icon-theme-full tango-icon-theme
-sudo apt-get -y install firefox
+sudo apt-get -y install chromium-browser
 
 # Install MATE desktop environment (until ubuntu-desktop works)
 sudo apt-get -y install mate-desktop-environment
@@ -115,7 +117,7 @@ sudo bash -c "cat <<EOF >> /etc/init.d/tightvncserver
 # /etc/init.d/tightvncserver
   case "\\\$1" in
   start)
-    sudo -u ubuntu /usr/bin/tightvncserver :1 -geometry 1200x800 -depth 16
+    sudo -u ubuntu /usr/bin/tightvncserver :1 -geometry 1280x720 -depth 16
     echo 'Starting TightVNC server'
     ;;
   stop)
