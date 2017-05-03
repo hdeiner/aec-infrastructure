@@ -19,7 +19,7 @@ you need valid ~/.aws config and credentials files.
 2. Create and downoad ssh PEM files.  This project referes to ~/.ssh/aws_linux.pem
 in several places.  Update accordingly.
 3. Make sure that Terraform is installed.
-4. Ensure that main.tf has appropriate settings for your use.  For example,
+4. Ensure that terraformProvider.tf has appropriate settings for your use.  For example,
 the AWS region may have to change, and that will require a change in the 
 AMI used.
 5. On the command line, create the infrastructure with
@@ -118,10 +118,10 @@ Howards-Mac:aec-infrastructure howarddeiner$ terraform output student_addresses
 ec2-54-234-29-7.compute-1.amazonaws.com,
 ec2-34-201-113-103.compute-1.amazonaws.com
 ```
-10. Students log on to their machine at port 8080.
+10. Students log on to their machine through a browser that supports HTML5.
 For example, a student would point their browser to
 ```
-http://ec2-54-152-234-84.compute-1.amazonaws.com:8080
+http://ec2-54-152-234-84.compute-1.amazonaws.com
 ```
 11. Log on with USERNAME and PASSWORD.
 12. It is assumed that you know how to use and configure Jenkins.  Point your browser to the URL created and provisioned by Terraform.  You will have to ssh into the Jenkins server once to supply the secret password to the browser to unlock Jenkins.
