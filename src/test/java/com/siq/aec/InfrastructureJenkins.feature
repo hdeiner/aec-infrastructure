@@ -9,4 +9,4 @@ Feature: Agile Engineering Course Infrastructure as Code for Jenkins Machine
 
     Examples:
       |aecJenkinsInstance                        |
-|ec2-54-196-175-125.compute-1.amazonaws.com|
+|ec2-54-208-74-195.compute-1.amazonaws.com|

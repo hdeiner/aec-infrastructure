@@ -10,4 +10,4 @@ Feature: Agile Engineering Course Infrastructure as Code for Student Machines
 
     Examples:
       |aecStudentInstance                        |
-|ec2-52-23-184-40.compute-1.amazonaws.com|
+|ec2-34-201-58-59.compute-1.amazonaws.com|
