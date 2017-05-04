@@ -6,7 +6,13 @@ Feature: Agile Engineering Course Infrastructure as Code for TeamCity Machine
     Then there should be ssh connectivity
     And there should be smtp connectivity
     And there should be http8111 connectivity
+#    Then it should be running "sshd" on port "22"
+#    And it should be running "master" on port "25"
+#    And it should be running "java" on port "8111"
+#    And port "22" should be open
+#    And port "25" should be open
+#    And port "80" should be open
 
     Examples:
       |aecTeamCityInstance                        |
-|ec2-54-157-223-214.compute-1.amazonaws.com|
+|ec2-34-203-217-157.compute-1.amazonaws.com|

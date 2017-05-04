@@ -5,8 +5,8 @@
 sudo apt-get -y update
 sudo apt-get -y install build-essential libcairo2-dev libjpeg-turbo8-dev libpng12-dev libossp-uuid-dev
 sudo apt-get -y install libavcodec-dev libavutil-dev libswscale-dev libfreerdp-dev libpango1.0-dev
-sudo apt-get -y install libssh2-1-dev libtelnet-dev libvncserver-dev libpulse-dev libssl-dev 
-sudo apt-get -y install libvorbis-dev libwebp-dev tomcat8 freerdp ghostscript jq wget curl 
+sudo apt-get -y install libssh2-1-dev libtelnet-dev libvncserver-dev libpulse-dev libssl-dev
+sudo apt-get -y install libvorbis-dev libwebp-dev tomcat8 freerdp ghostscript jq wget curl
 
 # Add GUACAMOLE_HOME to Tomcat8 ENV
 sudo chmod +w /etc/default/tomcat8
@@ -138,16 +138,17 @@ sudo update-rc.d tightvncserver defaults
 # Install Eclipse
 sudo apt-get -y install eclipse
 
-# Install IntelliJ 
+# Install IntelliJ
 sudo apt-get -y install default-jdk
 wget https://download.jetbrains.com/idea/ideaIC-2017.1.1.tar.gz
 sudo tar -xvf ideaIC-2017.1.1.tar.gz -C /opt/
 sudo ln -s /opt/idea-IC-171.4073.35/bin/idea.sh /usr/local/sbin/intellij
 
-# Make Guacamole run on port 80
-# Port forward requests from outside
+# Port forward 8080 requests to 80
+sudo apt-get remove -y iptables-persistent
+sudo iptables -I INPUT 1 -p tcp --dport 8080 -j ACCEPT
+sudo iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
-# Port forward requests from localhost
 sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080
 sudo sh -c "iptables-save > /etc/iptables.rules"
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y iptables-persistent

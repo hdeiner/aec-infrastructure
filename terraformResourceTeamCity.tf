@@ -11,6 +11,14 @@ resource "aws_instance" "ec2_aec_teamcity" {
     }
     script = "provisionTeamCity.sh"
   }
+  provisioner "remote-exec" {
+    connection {
+      type = "ssh",
+      user = "ubuntu",
+      private_key = "${file("~/.ssh/aws_linux.pem")}"
+    }
+    inline = ["sudo reboot now"]
+  }
   tags {
     Name = "Agile Engineering Class TeamCity"
   }
