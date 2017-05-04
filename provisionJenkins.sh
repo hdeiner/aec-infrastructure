@@ -20,8 +20,9 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mailutils
 
 # Make Jenkins run on port 80
 # Port forward requests from outside
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y iptables-persistent
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
 # Port forward requests from localhost
 sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080
 sudo sh -c "iptables-save > /etc/iptables.rules"
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -y iptables-persistent
+

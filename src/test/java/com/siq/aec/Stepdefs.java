@@ -47,6 +47,11 @@ public class Stepdefs {
         assertThat(netstatHasTomcatOpen(), is(true));
     }
 
+    @Then("^there should be http8111 connectivity$")
+    public void there_should_be_http8111_connectivity() throws Throwable {
+        assertThat(netstatHasTeamCityOpen(), is(true));
+    }
+
     @Then("^there should be http80 connectivity$")
     public void there_should_be_http80_connectivity() throws Throwable {
         assertThat(netstatHasHttpOpen(), is(true));
@@ -113,6 +118,15 @@ public class Stepdefs {
         }
         return result;
     }
+
+    private boolean netstatHasTeamCityOpen() {
+        boolean result = false;
+        for (String s : remoteNetstatResults) {
+            result |= s.matches("^tcp6\\s*\\d*\\s*\\d*\\s*:::8111\\s*:::\\*\\s*LISTEN\\s*\\d*\\/java.*$");
+        }
+        return result;
+    }
+
     private boolean netstatHasHttpOpen() {
         boolean result = false;
         for (String s : remoteNetstatResults) {
