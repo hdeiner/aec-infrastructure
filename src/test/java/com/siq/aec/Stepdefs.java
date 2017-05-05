@@ -14,47 +14,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class Stepdefs {
 
+    private String machineName;
     private List<String> remoteNetstatResults;
 
     @When("^I look at \"([^\"]*)\"$")
     public void i_look_at(String instanceURL) throws Throwable {
+        machineName = instanceURL;
         String[] cmd = {"/usr/bin/ssh", "-o", "StrictHostKeyChecking=no", "-i", "/Users/howarddeiner/.ssh/aws_linux.pem", "ubuntu@"+instanceURL, "sudo netstat -tulpn"};
         remoteNetstatResults = runShellCommand(cmd);
     }
 
-    @Then("^there should be ssh connectivity$")
-    public void there_should_be_ssh_connectivity() throws Throwable {
-        assertThat(netstatHasSshOpen(), is(true));
+    @Then("^it should be running \"([^\"]*)\" on port \"([^\"]*)\"$")
+    public void it_should_be_running_on_port(String programName, String portNumber) throws Throwable {
+        assertThat(isProgramRunningOnPort(programName, portNumber), is(true));
     }
 
-    @Then("^there should be smtp connectivity$")
-    public void there_should_be_smtp_connectivity() throws Throwable {
-        assertThat(netstatHasSmtpOpen(), is(true));
-    }
-
-    @Then("^there should be vnc connectivity$")
-    public void there_should_be_vnc_connectivity() throws Throwable {
-        assertThat(netstatHasVncOpen(), is(true));
-    }
-
-    @Then("^there should be guacd connectivity$")
-    public void there_should_be_guacd_connectivity() throws Throwable {
-        assertThat(netstatHasGuacdRunning(), is(true));
-    }
-
-    @Then("^there should be http8080 connectivity$")
-    public void there_should_be_http8080_connectivity() throws Throwable {
-        assertThat(netstatHasTomcatOpen(), is(true));
-    }
-
-    @Then("^there should be http8111 connectivity$")
-    public void there_should_be_http8111_connectivity() throws Throwable {
-        assertThat(netstatHasTeamCityOpen(), is(true));
-    }
-
-    @Then("^there should be http80 connectivity$")
-    public void there_should_be_http80_connectivity() throws Throwable {
-        assertThat(netstatHasHttpOpen(), is(true));
+    @Then("^port \"([^\"]*)\" should be open$")
+    public void port_should_be_open(String portNumber) throws Throwable {
+        assertThat(isPortOpen(portNumber), is(true));
     }
 
     private List<String> runShellCommand(String[] command) throws IOException {
@@ -63,7 +40,6 @@ public class Stepdefs {
         Process p = Runtime.getRuntime().exec(command);
 
         BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
         BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
         String s = null;
@@ -79,58 +55,22 @@ public class Stepdefs {
         return output;
     }
 
-    private boolean netstatHasSshOpen() {
+    private boolean isProgramRunningOnPort(String programName, String portNumber) {
         boolean result = false;
         for (String s : remoteNetstatResults) {
-            result |= s.matches("^tcp\\s*\\d*\\s*\\d*\\s*0\\.0\\.0\\.0\\:22\\s*0\\.0\\.0\\.0\\:\\*\\s*LISTEN\\s*\\d*\\/sshd.*$");
+            String regEx = "^tcp\\d*\\s*\\d*\\s*\\d*\\s*[0127\\.\\:]+" + portNumber + "\\s*[0\\.\\:]+\\*\\s*LISTEN\\s*\\d+\\/" + programName + ".*$";
+            result |= s.matches(regEx);
         }
         return result;
     }
 
-    private boolean netstatHasSmtpOpen() {
+    private boolean isPortOpen(String portNumber) throws IOException {
+        String[] cmd = {"/usr/local/bin/nmap", machineName, "-p", portNumber};
+        List<String> nmapResults = runShellCommand(cmd);
         boolean result = false;
-        for (String s : remoteNetstatResults) {
-            result |= s.matches("^tcp\\s*\\d*\\s*\\d*\\s*0\\.0\\.0\\.0\\:25\\s*0\\.0\\.0\\.0\\:\\*\\s*LISTEN\\s*\\d*\\/master.*$");
-        }
-        return result;
-    }
-
-    private boolean netstatHasVncOpen() {
-        boolean result = false;
-        for (String s : remoteNetstatResults) {
-            result |= s.matches("^tcp\\s*\\d*\\s*\\d*\\s*0\\.0\\.0\\.0\\:5901\\s*0\\.0\\.0\\.0\\:\\*\\s*LISTEN\\s*\\d*\\/Xtightvnc.*$");
-        }
-        return result;
-    }
-
-    private boolean netstatHasGuacdRunning() {
-        boolean result = false;
-        for (String s : remoteNetstatResults) {
-            result |= s.matches("^tcp\\s*\\d*\\s*\\d*\\s*127\\.0\\.0\\.1\\:4822\\s*0\\.0\\.0\\.0\\:\\*\\s*LISTEN\\s*\\d*\\/guacd.*$");
-        }
-        return result;
-    }
-
-    private boolean netstatHasTomcatOpen() {
-        boolean result = false;
-        for (String s : remoteNetstatResults) {
-            result |= s.matches("^tcp6\\s*\\d*\\s*\\d*\\s*:::8080\\s*:::\\*\\s*LISTEN\\s*\\d*\\/java.*$");
-        }
-        return result;
-    }
-
-    private boolean netstatHasTeamCityOpen() {
-        boolean result = false;
-        for (String s : remoteNetstatResults) {
-            result |= s.matches("^tcp6\\s*\\d*\\s*\\d*\\s*:::8111\\s*:::\\*\\s*LISTEN\\s*\\d*\\/java.*$");
-        }
-        return result;
-    }
-
-    private boolean netstatHasHttpOpen() {
-        boolean result = false;
-        for (String s : remoteNetstatResults) {
-            result |= s.matches("^tcp\\s*\\d*\\s*\\d*\\s*0\\.0\\.0\\.0\\:80\\s*0\\.0\\.0\\.0\\:\\*\\s+LISTEN\\s+\\d+\\/\\S+.*$");
+        for (String s : nmapResults) {
+            String regEx = "^" + portNumber + ".*open.*$";
+            result |= s.matches(regEx);
         }
         return result;
     }
