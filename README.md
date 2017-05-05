@@ -7,6 +7,7 @@ This is a fairly simple Terraform example that can generate as many EC2 instance
   - Low cost.
   - Easy to setup before class starts.
   - Provide a continuous integration machine for class demos.
+  - Provide a git remote repository machine for class demos.
 
 # Design 
 To meet these goals, the decision was made to run on AWS EC2 instances.  These instances are treated as Infrastructure as Code (hence this project).  As written, the instances run Ubuntu 16.04.  There is not a publically available AWS AMI that includes the Ubuntu Desktop.  This project provisions a complete desktop, along with IntelliJ for students to easily write and debug code with.
@@ -16,8 +17,9 @@ To gain access to the desktop, virutal network computing (VNC) protocol is layer
 # Use
 1. Make sure that you can use AWS CLI without issue.  In particular,
 you need valid ~/.aws config and credentials files.
-2. Create and downoad ssh PEM files.  This project referes to ~/.ssh/aws_linux.pem
-in several places.  Update accordingly.
+2. Make sure that you have SSH keys generated in your ~/.ssh.  This can be done by: 
+```ssh-keygen -t rsa
+```
 3. Make sure that Terraform is installed.
 4. Ensure that terraformProvider.tf has appropriate settings for your use.  For example,
 the AWS region may have to change, and that will require a change in the 
@@ -28,7 +30,7 @@ AMI used.
  ```
 6. After a whole lot of provisioning, you should see things such as the following.  This was run with two student instances being created. 
 ```
-Apply complete! Resources: 8 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 9 added, 0 changed, 0 destroyed.
 
 The state of your infrastructure has been saved to the path
 below. This state is required to modify and destroy your
@@ -40,16 +42,28 @@ State path:
 Outputs:
 
 gitlab_address = [
-    ec2-34-207-89-114.compute-1.amazonaws.com
+    ec2-54-175-158-139.compute-1.amazonaws.com
+]
+gitlab_ip = [
+    54.175.158.139
 ]
 jenkins_address = [
-    ec2-34-201-93-235.compute-1.amazonaws.com
+    ec2-54-144-23-36.compute-1.amazonaws.com
+]
+jenkins_ip = [
+    54.144.23.36
 ]
 student_addresses = [
-    ec2-54-82-248-68.compute-1.amazonaws.com
+    ec2-184-73-144-130.compute-1.amazonaws.com
+]
+student_ips = [
+    184.73.144.130
 ]
 teamcity_address = [
-    ec2-34-203-217-157.compute-1.amazonaws.com
+    ec2-34-201-43-178.compute-1.amazonaws.com
+]
+teamcity_ip = [
+    34.201.43.178
 ]
 ```
 7. Integrated automated testing of the infrastructure is built into the system.
@@ -70,112 +84,110 @@ You should see results of the tests, such as
 Running com.siq.aec.TestRunner
 Feature: Agile Engineering Course Infrastructure as Code for Gitlab Machine
 
-  Scenario Outline: Check GitLab connectivity # InfrastructureGitlab.feature:3
+  Scenario Outline: Check GitLab connectivity      # InfrastructureGitlab.feature:3
     When I look at "<aecGitlabInstance>"
-    Then there should be ssh connectivity
-    And there should be smtp connectivity
-    And there should be http80 connectivity
+    Then it should be running "sshd" on port "22"
+    And it should be running "master" on port "25"
+    And it should be running "nginx" on port "80"
+    And port "22" should be open
+    And port "25" should be open
+    And port "80" should be open
 
-    #    Then it should be running "sshd" on port "22"
-    #    And it should be running "master" on port "25"
-    #    And it should be running "java" on port "8080"
-    #    And port "22" should be open
-    #    And port "25" should be open
-    #    And port "80" should be open
     Examples: 
-!!! Warning: Permanently added 'ec2-34-207-89-114.compute-1.amazonaws.com,34.207.89.114' (ECDSA) to the list of known hosts.
+!!! Warning: Permanently added 'ec2-54-175-158-139.compute-1.amazonaws.com,54.175.158.139' (ECDSA) to the list of known hosts.
 
-  Scenario Outline: Check GitLab connectivity                  # InfrastructureGitlab.feature:18
-    When I look at "ec2-34-207-89-114.compute-1.amazonaws.com" # Stepdefs.i_look_at(String)
-    Then there should be ssh connectivity                      # Stepdefs.there_should_be_ssh_connectivity()
-    And there should be smtp connectivity                      # Stepdefs.there_should_be_smtp_connectivity()
-    And there should be http80 connectivity                    # Stepdefs.there_should_be_http80_connectivity()
+  Scenario Outline: Check GitLab connectivity                   # InfrastructureGitlab.feature:15
+    When I look at "ec2-54-175-158-139.compute-1.amazonaws.com" # Stepdefs.i_look_at(String)
+    Then it should be running "sshd" on port "22"               # Stepdefs.it_should_be_running_on_port(String,String)
+    And it should be running "master" on port "25"              # Stepdefs.it_should_be_running_on_port(String,String)
+    And it should be running "nginx" on port "80"               # Stepdefs.it_should_be_running_on_port(String,String)
+    And port "22" should be open                                # Stepdefs.port_should_be_open(String)
+    And port "25" should be open                                # Stepdefs.port_should_be_open(String)
+    And port "80" should be open                                # Stepdefs.port_should_be_open(String)
 Feature: Agile Engineering Course Infrastructure as Code for Jenkins Machine
 
-  Scenario Outline: Check Jenkins connectivity # InfrastructureJenkins.feature:3
+  Scenario Outline: Check Jenkins connectivity     # InfrastructureJenkins.feature:3
     When I look at "<aecJenkinsInstance>"
-    Then there should be ssh connectivity
-    And there should be smtp connectivity
-    And there should be http8080 connectivity
+    Then it should be running "sshd" on port "22"
+    And it should be running "master" on port "25"
+    And it should be running "java" on port "8080"
+    And port "22" should be open
+    And port "25" should be open
+    And port "80" should be open
 
-    #    Then internally it should be running "sshd" on port "22"
-    #    And it should be running "master" on port "25"
-    #    And it should be running "java" on port "8080"
-    #    And port "22" should be open
-    #    And port "25" should be open
-    #    And port "80" should be open
     Examples: 
-!!! Warning: Permanently added 'ec2-34-201-93-235.compute-1.amazonaws.com,34.201.93.235' (ECDSA) to the list of known hosts.
+!!! Warning: Permanently added 'ec2-54-144-23-36.compute-1.amazonaws.com,54.144.23.36' (ECDSA) to the list of known hosts.
 
-  Scenario Outline: Check Jenkins connectivity                 # InfrastructureJenkins.feature:20
-    When I look at "ec2-34-201-93-235.compute-1.amazonaws.com" # Stepdefs.i_look_at(String)
-    Then there should be ssh connectivity                      # Stepdefs.there_should_be_ssh_connectivity()
-    And there should be smtp connectivity                      # Stepdefs.there_should_be_smtp_connectivity()
-    And there should be http8080 connectivity                  # Stepdefs.there_should_be_http8080_connectivity()
+  Scenario Outline: Check Jenkins connectivity                # InfrastructureJenkins.feature:16
+    When I look at "ec2-54-144-23-36.compute-1.amazonaws.com" # Stepdefs.i_look_at(String)
+    Then it should be running "sshd" on port "22"             # Stepdefs.it_should_be_running_on_port(String,String)
+    And it should be running "master" on port "25"            # Stepdefs.it_should_be_running_on_port(String,String)
+    And it should be running "java" on port "8080"            # Stepdefs.it_should_be_running_on_port(String,String)
+    And port "22" should be open                              # Stepdefs.port_should_be_open(String)
+    And port "25" should be open                              # Stepdefs.port_should_be_open(String)
+    And port "80" should be open                              # Stepdefs.port_should_be_open(String)
 Feature: Agile Engineering Course Infrastructure as Code for Student Machines
 
-  Scenario Outline: Check Student connectivity # InfrastructureStudent.feature:3
+  Scenario Outline: Check Student connectivity          # InfrastructureStudent.feature:3
     When I look at "<aecStudentInstance>"
-    Then there should be ssh connectivity
-    And there should be vnc connectivity
-    And there should be guacd connectivity
-    And there should be http8080 connectivity
+    Then it should be running "sshd" on port "22"
+    And it should be running "guacd" on port "4822"
+    And it should be running "Xtightvnc" on port "5901"
+    And it should be running "java" on port "8080"
+    And port "22" should be open
+    And port "80" should be open
 
-    #    Then it should be running "sshd" on port "22"
-    #    And it should be running "vnc" on port "4822"
-    #    And it should be running "guacd" on port "8080"
-    #    And port "22" should be open
-    #    And port "80" should be open
     Examples: 
-!!! Warning: Permanently added 'ec2-54-82-248-68.compute-1.amazonaws.com,54.82.248.68' (ECDSA) to the list of known hosts.
+!!! Warning: Permanently added 'ec2-184-73-144-130.compute-1.amazonaws.com,184.73.144.130' (ECDSA) to the list of known hosts.
 
-  Scenario Outline: Check Student connectivity                # InfrastructureStudent.feature:18
-    When I look at "ec2-54-82-248-68.compute-1.amazonaws.com" # Stepdefs.i_look_at(String)
-    Then there should be ssh connectivity                     # Stepdefs.there_should_be_ssh_connectivity()
-    And there should be vnc connectivity                      # Stepdefs.there_should_be_vnc_connectivity()
-    And there should be guacd connectivity                    # Stepdefs.there_should_be_guacd_connectivity()
-    And there should be http8080 connectivity                 # Stepdefs.there_should_be_http8080_connectivity()
+  Scenario Outline: Check Student connectivity                  # InfrastructureStudent.feature:15
+    When I look at "ec2-184-73-144-130.compute-1.amazonaws.com" # Stepdefs.i_look_at(String)
+    Then it should be running "sshd" on port "22"               # Stepdefs.it_should_be_running_on_port(String,String)
+    And it should be running "guacd" on port "4822"             # Stepdefs.it_should_be_running_on_port(String,String)
+    And it should be running "Xtightvnc" on port "5901"         # Stepdefs.it_should_be_running_on_port(String,String)
+    And it should be running "java" on port "8080"              # Stepdefs.it_should_be_running_on_port(String,String)
+    And port "22" should be open                                # Stepdefs.port_should_be_open(String)
+    And port "80" should be open                                # Stepdefs.port_should_be_open(String)
 Feature: Agile Engineering Course Infrastructure as Code for TeamCity Machine
 
-  Scenario Outline: Check TeamCity connectivity # InfrastructureTeamCity.feature:3
+  Scenario Outline: Check TeamCity connectivity    # InfrastructureTeamCity.feature:3
     When I look at "<aecTeamCityInstance>"
-    Then there should be ssh connectivity
-    And there should be smtp connectivity
-    And there should be http8111 connectivity
+    Then it should be running "sshd" on port "22"
+    And it should be running "master" on port "25"
+    And it should be running "java" on port "8111"
+    And port "22" should be open
+    And port "25" should be open
+    And port "80" should be open
 
-    #    Then it should be running "sshd" on port "22"
-    #    And it should be running "master" on port "25"
-    #    And it should be running "java" on port "8111"
-    #    And port "22" should be open
-    #    And port "25" should be open
-    #    And port "80" should be open
     Examples: 
-!!! Warning: Permanently added 'ec2-34-203-217-157.compute-1.amazonaws.com,34.203.217.157' (ECDSA) to the list of known hosts.
+!!! Warning: Permanently added 'ec2-34-201-43-178.compute-1.amazonaws.com,34.201.43.178' (ECDSA) to the list of known hosts.
 
-  Scenario Outline: Check TeamCity connectivity                 # InfrastructureTeamCity.feature:18
-    When I look at "ec2-34-203-217-157.compute-1.amazonaws.com" # Stepdefs.i_look_at(String)
-    Then there should be ssh connectivity                       # Stepdefs.there_should_be_ssh_connectivity()
-    And there should be smtp connectivity                       # Stepdefs.there_should_be_smtp_connectivity()
-    And there should be http8111 connectivity                   # Stepdefs.there_should_be_http8111_connectivity()
+  Scenario Outline: Check TeamCity connectivity                # InfrastructureTeamCity.feature:15
+    When I look at "ec2-34-201-43-178.compute-1.amazonaws.com" # Stepdefs.i_look_at(String)
+    Then it should be running "sshd" on port "22"              # Stepdefs.it_should_be_running_on_port(String,String)
+    And it should be running "master" on port "25"             # Stepdefs.it_should_be_running_on_port(String,String)
+    And it should be running "java" on port "8111"             # Stepdefs.it_should_be_running_on_port(String,String)
+    And port "22" should be open                               # Stepdefs.port_should_be_open(String)
+    And port "25" should be open                               # Stepdefs.port_should_be_open(String)
+    And port "80" should be open                               # Stepdefs.port_should_be_open(String)
 
 4 Scenarios (4 passed)
-17 Steps (17 passed)
-0m3.488s
+28 Steps (28 passed)
+0m7.403s
 
-Tests run: 21, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.15 sec
+Tests run: 32, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.635 sec
 
 Results :
 
-Tests run: 21, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 32, Failures: 0, Errors: 0, Skipped: 0
 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 12.874 s
-[INFO] Finished at: 2017-05-04T19:11:47-04:00
-[INFO] Final Memory: 23M/220M
-[INFO] ------------------------------------------------------------------------
-```
+[INFO] Total time: 17.490 s
+[INFO] Finished at: 2017-05-05T18:45:04-04:00
+[INFO] Final Memory: 20M/188M
+[INFO] ------------------------------------------------------------------------```
 9. Use the following terraform commands to aid in the creation of
 eMails, etc.:
 ```
@@ -211,46 +223,49 @@ Do you really want to destroy?
 
   Enter a value: yes
 
-aws_security_group.aec_sg_student: Refreshing state... (ID: sg-1289556c)
-aws_security_group.aec_sg_teamcity: Refreshing state... (ID: sg-a68955d8)
-aws_security_group.aec_sg_gitlab: Refreshing state... (ID: sg-1389556d)
-aws_security_group.aec_sg_jenkins: Refreshing state... (ID: sg-1484586a)
-aws_instance.ec2_aec_jenkins: Refreshing state... (ID: i-0ad24bbbf6c1eac39)
-aws_instance.ec2_aec_student: Refreshing state... (ID: i-056454e0a7d585259)
-aws_instance.ec2_aec_teamcity: Refreshing state... (ID: i-0d94befc5f0f8e5bb)
-aws_instance.ec2_aec_gitlab: Refreshing state... (ID: i-03969ddf4d894fed4)
-aws_instance.ec2_aec_student: Destroying... (ID: i-056454e0a7d585259)
-aws_instance.ec2_aec_teamcity: Destroying... (ID: i-0d94befc5f0f8e5bb)
-aws_instance.ec2_aec_gitlab: Destroying... (ID: i-03969ddf4d894fed4)
-aws_instance.ec2_aec_jenkins: Destroying... (ID: i-0ad24bbbf6c1eac39)
-aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-0ad24bbbf6c1eac39, 10s elapsed)
-aws_instance.ec2_aec_student: Still destroying... (ID: i-056454e0a7d585259, 10s elapsed)
-aws_instance.ec2_aec_teamcity: Still destroying... (ID: i-0d94befc5f0f8e5bb, 10s elapsed)
-aws_instance.ec2_aec_gitlab: Still destroying... (ID: i-03969ddf4d894fed4, 10s elapsed)
-aws_instance.ec2_aec_student: Still destroying... (ID: i-056454e0a7d585259, 20s elapsed)
-aws_instance.ec2_aec_teamcity: Still destroying... (ID: i-0d94befc5f0f8e5bb, 20s elapsed)
-aws_instance.ec2_aec_gitlab: Still destroying... (ID: i-03969ddf4d894fed4, 20s elapsed)
-aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-0ad24bbbf6c1eac39, 20s elapsed)
-aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-0ad24bbbf6c1eac39, 30s elapsed)
-aws_instance.ec2_aec_teamcity: Still destroying... (ID: i-0d94befc5f0f8e5bb, 30s elapsed)
-aws_instance.ec2_aec_student: Still destroying... (ID: i-056454e0a7d585259, 30s elapsed)
-aws_instance.ec2_aec_gitlab: Still destroying... (ID: i-03969ddf4d894fed4, 30s elapsed)
+aws_security_group.aec_sg_gitlab: Refreshing state... (ID: sg-1e2b8f60)
+aws_security_group.aec_sg_student: Refreshing state... (ID: sg-ef2a8e91)
+aws_security_group.aec_sg_jenkins: Refreshing state... (ID: sg-993591e7)
+aws_security_group.aec_sg_teamcity: Refreshing state... (ID: sg-b5298dcb)
+aws_key_pair.aec_key_pair: Refreshing state... (ID: aec_key_pair)
+aws_instance.ec2_aec_gitlab: Refreshing state... (ID: i-01a75a9cd42d2006f)
+aws_instance.ec2_aec_teamcity: Refreshing state... (ID: i-06fb706eed1b25e54)
+aws_instance.ec2_aec_jenkins: Refreshing state... (ID: i-022d3e0d11eab8722)
+aws_instance.ec2_aec_student: Refreshing state... (ID: i-0a0c0904390d45013)
+aws_instance.ec2_aec_gitlab: Destroying... (ID: i-01a75a9cd42d2006f)
+aws_instance.ec2_aec_student: Destroying... (ID: i-0a0c0904390d45013)
+aws_instance.ec2_aec_teamcity: Destroying... (ID: i-06fb706eed1b25e54)
+aws_instance.ec2_aec_jenkins: Destroying... (ID: i-022d3e0d11eab8722)
+aws_instance.ec2_aec_teamcity: Still destroying... (ID: i-06fb706eed1b25e54, 10s elapsed)
+aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-022d3e0d11eab8722, 10s elapsed)
+aws_instance.ec2_aec_student: Still destroying... (ID: i-0a0c0904390d45013, 10s elapsed)
+aws_instance.ec2_aec_gitlab: Still destroying... (ID: i-01a75a9cd42d2006f, 10s elapsed)
+aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-022d3e0d11eab8722, 20s elapsed)
+aws_instance.ec2_aec_gitlab: Still destroying... (ID: i-01a75a9cd42d2006f, 20s elapsed)
+aws_instance.ec2_aec_teamcity: Still destroying... (ID: i-06fb706eed1b25e54, 20s elapsed)
+aws_instance.ec2_aec_student: Still destroying... (ID: i-0a0c0904390d45013, 20s elapsed)
+aws_instance.ec2_aec_student: Still destroying... (ID: i-0a0c0904390d45013, 30s elapsed)
+aws_instance.ec2_aec_gitlab: Still destroying... (ID: i-01a75a9cd42d2006f, 30s elapsed)
+aws_instance.ec2_aec_teamcity: Still destroying... (ID: i-06fb706eed1b25e54, 30s elapsed)
+aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-022d3e0d11eab8722, 30s elapsed)
 aws_instance.ec2_aec_student: Destruction complete
-aws_security_group.aec_sg_student: Destroying... (ID: sg-1289556c)
-aws_instance.ec2_aec_gitlab: Destruction complete
-aws_security_group.aec_sg_gitlab: Destroying... (ID: sg-1389556d)
+aws_security_group.aec_sg_student: Destroying... (ID: sg-ef2a8e91)
 aws_instance.ec2_aec_teamcity: Destruction complete
-aws_security_group.aec_sg_teamcity: Destroying... (ID: sg-a68955d8)
-aws_security_group.aec_sg_gitlab: Destruction complete
+aws_security_group.aec_sg_teamcity: Destroying... (ID: sg-b5298dcb)
 aws_security_group.aec_sg_student: Destruction complete
 aws_security_group.aec_sg_teamcity: Destruction complete
-aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-0ad24bbbf6c1eac39, 40s elapsed)
-aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-0ad24bbbf6c1eac39, 50s elapsed)
-aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-0ad24bbbf6c1eac39, 1m0s elapsed)
-aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-0ad24bbbf6c1eac39, 1m10s elapsed)
+aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-022d3e0d11eab8722, 40s elapsed)
+aws_instance.ec2_aec_gitlab: Still destroying... (ID: i-01a75a9cd42d2006f, 40s elapsed)
+aws_instance.ec2_aec_gitlab: Destruction complete
+aws_security_group.aec_sg_gitlab: Destroying... (ID: sg-1e2b8f60)
+aws_security_group.aec_sg_gitlab: Destruction complete
+aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-022d3e0d11eab8722, 50s elapsed)
+aws_instance.ec2_aec_jenkins: Still destroying... (ID: i-022d3e0d11eab8722, 1m0s elapsed)
 aws_instance.ec2_aec_jenkins: Destruction complete
-aws_security_group.aec_sg_jenkins: Destroying... (ID: sg-1484586a)
+aws_security_group.aec_sg_jenkins: Destroying... (ID: sg-993591e7)
+aws_key_pair.aec_key_pair: Destroying... (ID: aec_key_pair)
+aws_key_pair.aec_key_pair: Destruction complete
 aws_security_group.aec_sg_jenkins: Destruction complete
 
-Destroy complete! Resources: 8 destroyed.
+Destroy complete! Resources: 9 destroyed.
 ```

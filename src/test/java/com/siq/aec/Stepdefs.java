@@ -20,7 +20,7 @@ public class Stepdefs {
     @When("^I look at \"([^\"]*)\"$")
     public void i_look_at(String instanceURL) throws Throwable {
         machineName = instanceURL;
-        String[] cmd = {"/usr/bin/ssh", "-o", "StrictHostKeyChecking=no", "-i", "/Users/howarddeiner/.ssh/aws_linux.pem", "ubuntu@"+instanceURL, "sudo netstat -tulpn"};
+        String[] cmd = {"/usr/bin/ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+instanceURL, "sudo netstat -tulpn"};
         remoteNetstatResults = runShellCommand(cmd);
     }
 
