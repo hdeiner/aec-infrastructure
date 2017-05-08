@@ -184,6 +184,7 @@ Tests run: 32, Failures: 0, Errors: 0, Skipped: 0
 [INFO] Finished at: 2017-05-05T18:45:04-04:00
 [INFO] Final Memory: 20M/188M
 [INFO] ------------------------------------------------------------------------```
+```
 9. Use the following terraform commands to aid in the creation of
 eMails, etc. (responses are should after the command):
 ```
