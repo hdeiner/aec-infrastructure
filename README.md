@@ -72,12 +72,7 @@ To test, from the command line, enter
 ```
 mvn
 ```
-8. Cucumber feature files will be built in the validate exec:java phase and run in the test phase.
-After typing
-```
-mvn
-```
-You should see results of the tests, such as
+8. Cucumber feature files will be built in the validate exec:java phase and run in the test phase.  You should see things like the following in response to your "mvn" command:
 ```
 -------------------------------------------------------
  T E S T S
@@ -190,15 +185,15 @@ Tests run: 32, Failures: 0, Errors: 0, Skipped: 0
 [INFO] Final Memory: 20M/188M
 [INFO] ------------------------------------------------------------------------```
 9. Use the following terraform commands to aid in the creation of
-eMails, etc.:
+eMails, etc. (responses are should after the command):
 ```
-> terraform output gitlab_address
+terraform output gitlab_address
 ec2-34-207-89-114.compute-1.amazonaws.com
-> terraform output jenkins_address
+terraform output jenkins_address
 ec2-34-201-93-235.compute-1.amazonaws.com
-> terraform output student_addresses
+terraform output student_addresses
 ec2-54-82-248-68.compute-1.amazonaws.com
-> terraform output teamcity_address
+terraform output teamcity_address
 ec2-34-203-217-157.compute-1.amazonaws.com
 ```
 10. Students log on to their machine through a browser that supports HTML5.
@@ -217,7 +212,7 @@ terraform destroy
 ```
 16. You will have to type in "yes" and should see things like:
 ```
-> terraform destroy
+terraform destroy
 Do you really want to destroy?
   Terraform will delete all your managed infrastructure.
   There is no undo. Only 'yes' will be accepted to confirm.
