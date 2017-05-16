@@ -144,6 +144,10 @@ wget https://download.jetbrains.com/idea/ideaIC-2017.1.1.tar.gz
 sudo tar -xvf ideaIC-2017.1.1.tar.gz -C /opt/
 sudo ln -s /opt/idea-IC-171.4073.35/bin/idea.sh /usr/local/sbin/intellij
 
+# IntelliJ Settings
+wget https://s3.amazonaws.com/howarddeiner/provisionStudentIntellijSettings.tar
+tar -xvf provisionStudentIntellijSettings.tar
+
 # Port forward 8080 requests to 80
 sudo apt-get remove -y iptables-persistent
 sudo iptables -I INPUT 1 -p tcp --dport 8080 -j ACCEPT
@@ -157,3 +161,4 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y iptables-persistent
 rm guacamole-server-0.9.12-incubating.tar.gz
 rm ideaIC-2017.1.1.tar.gz
 rm -rf guacamole-server-0.9.12-incubating
+rm -rf provisionStudentIntellijSettings.tar
