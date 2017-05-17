@@ -145,8 +145,20 @@ sudo tar -xvf ideaIC-2017.1.1.tar.gz -C /opt/
 sudo ln -s /opt/idea-IC-171.4073.35/bin/idea.sh /usr/local/sbin/intellij
 
 # IntelliJ Settings
-wget https://s3.amazonaws.com/howarddeiner/provisionStudentIntellijSettings.tar
-tar -xvf provisionStudentIntellijSettings.tar
+cd /home/ubuntu
+wget https://s3.amazonaws.com/howarddeiner/provision-intellij-settings.tar
+tar -xvf provision-intellij-settings.tar
+
+# IntelliJ Class Project
+mkdir /home/ubuntu/IdeaProjects
+cd /home/ubuntu/IdeaProjects
+wget https://s3.amazonaws.com/howarddeiner/rpn-calculator.tar
+tar -xvf rpn-calculator.tar
+mkdir /home/ubuntu/.m2
+cd /home/ubuntu/.m2
+wget https://s3.amazonaws.com/howarddeiner/m2-repository.tar
+tar -xvf m2-repository.tar
+
 
 # Port forward 8080 requests to 80
 sudo apt-get remove -y iptables-persistent
@@ -158,7 +170,9 @@ sudo sh -c "iptables-save > /etc/iptables.rules"
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y iptables-persistent
 
 # Cleanup
-rm guacamole-server-0.9.12-incubating.tar.gz
-rm ideaIC-2017.1.1.tar.gz
-rm -rf guacamole-server-0.9.12-incubating
-rm -rf provisionStudentIntellijSettings.tar
+rm -rf /home/ubuntu/guacamole-server-0.9.12-incubating.tar.gz
+rm -rf /home/ubuntu/ideaIC-2017.1.1.tar.gz
+rm -rf /home/ubuntu/guacamole-server-0.9.12-incubating
+rm -rf /home/ubuntu/provision-intellij-settings.tar
+rm -rf /home/ubuntu/IdeaProjects/rpn-calculator.tar
+rm -rf /home/ubuntu/.m2/m2-repository.tar
