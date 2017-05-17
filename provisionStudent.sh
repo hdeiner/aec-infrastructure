@@ -143,6 +143,20 @@ sudo apt-get -y install default-jdk
 wget https://download.jetbrains.com/idea/ideaIC-2017.1.1.tar.gz
 sudo tar -xvf ideaIC-2017.1.1.tar.gz -C /opt/
 sudo ln -s /opt/idea-IC-171.4073.35/bin/idea.sh /usr/local/sbin/intellij
+sudo bash -c 'cat <<EOF >> /usr/share/applications/intellij.desktop
+[Desktop Entry]
+Version=IntelliJ IDEA 2017.1.1
+Type=Application
+Terminal=false
+Icon[en-US]=/opt/idea-IC-171.4073.35/bin/idea.png
+Name[en-US]=IntelliJ
+Exec=/opt/idea-IC-171.4073.35/bin/idea.sh
+Name=IntelliJ
+Icon=/opt/idea-IC-171.4073.35/bin/idea.png
+Categories=Development;IDE;Java;
+EOF'
+sudo chmod 644 /usr/share/applications/intellij.desktop
+sudo chown root:root /usr/share/applications/intellij.desktop
 
 # IntelliJ Settings
 cd /home/ubuntu
