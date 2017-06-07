@@ -2,11 +2,11 @@
 # UBUNTU 16.04 WITH GUACAMOLE 0.9.12, TOMCAT8, AND TIGHTVNC
 
 #Install Stuff
-sudo apt-get -y update
-sudo apt-get -y install build-essential libcairo2-dev libjpeg-turbo8-dev libpng12-dev libossp-uuid-dev
-sudo apt-get -y install libavcodec-dev libavutil-dev libswscale-dev libfreerdp-dev libpango1.0-dev
-sudo apt-get -y install libssh2-1-dev libtelnet-dev libvncserver-dev libpulse-dev libssl-dev
-sudo apt-get -y install libvorbis-dev libwebp-dev tomcat8 freerdp ghostscript jq wget curl
+sudo apt-get -yqq update
+sudo apt-get -yqq install build-essential libcairo2-dev libjpeg-turbo8-dev libpng12-dev libossp-uuid-dev
+sudo apt-get -yqq install libavcodec-dev libavutil-dev libswscale-dev libfreerdp-dev libpango1.0-dev
+sudo apt-get -yqq install libssh2-1-dev libtelnet-dev libvncserver-dev libpulse-dev libssl-dev
+sudo apt-get -yqq install libvorbis-dev libwebp-dev tomcat8 freerdp ghostscript jq wget curl
 
 # Add GUACAMOLE_HOME to Tomcat8 ENV
 sudo chmod +w /etc/default/tomcat8
@@ -79,18 +79,18 @@ sudo service tomcat8 restart
 /usr/local/sbin/guacd
 
 # Install VNC server
-sudo apt-get -y install tightvncserver
+sudo apt-get -yqq install tightvncserver
 
 # Install xfece4 (until ubuntu-desktop works)
-sudo apt-get -y install xfce4 xfce4-goodies
-sudo apt-get -y install gnome-icon-theme-full tango-icon-theme
-sudo apt-get -y install chromium-browser
+sudo apt-get -yqq install xfce4 xfce4-goodies
+sudo apt-get -yqq install gnome-icon-theme-full tango-icon-theme
+sudo apt-get -yqq install chromium-browser
 
 # Install MATE desktop environment (until ubuntu-desktop works)
-sudo apt-get -y install mate-desktop-environment
+sudo apt-get -yqq install mate-desktop-environment
 
 # Install ubuntu-desktop
-# sudo apt-get -y install ubuntu-desktop gnome-panel gnome-settings-daemon
+# sudo apt-get -yqq install ubuntu-desktop gnome-panel gnome-settings-daemon
 
 # Make up a VNC password file
 mkdir /home/ubuntu/.vnc
@@ -136,23 +136,23 @@ sudo chmod 755 /etc/init.d/tightvncserver
 sudo update-rc.d tightvncserver defaults
 
 # Install Eclipse
-sudo apt-get -y install eclipse
+sudo apt-get -yqq install eclipse
 
 # Install IntelliJ
-sudo apt-get -y install default-jdk
-wget https://download.jetbrains.com/idea/ideaIC-2017.1.1.tar.gz
-sudo tar -xvf ideaIC-2017.1.1.tar.gz -C /opt/
-sudo ln -s /opt/idea-IC-171.4073.35/bin/idea.sh /usr/local/sbin/intellij
+sudo apt-get -yqq install default-jdk
+wget https://download.jetbrains.com/idea/ideaIC-2017.1.4.tar.gz
+sudo tar -xf ideaIC-2017.1.4.tar.gz -C /opt/
+sudo ln -s /opt/idea-IC-171.4694.23/bin/idea.sh /usr/local/sbin/intellij
 sudo bash -c 'cat <<EOF >> /usr/share/applications/intellij.desktop
 [Desktop Entry]
-Version=IntelliJ IDEA 2017.1.1
+Version=IntelliJ IDEA 2017.1.4
 Type=Application
 Terminal=false
-Icon[en-US]=/opt/idea-IC-171.4073.35/bin/idea.png
+Icon[en-US]=/opt/idea-IC-171.4694.23/bin/idea.png
 Name[en-US]=IntelliJ
-Exec=/opt/idea-IC-171.4073.35/bin/idea.sh
+Exec=/opt/idea-IC-171.4694.23/bin/idea.sh
 Name=IntelliJ
-Icon=/opt/idea-IC-171.4073.35/bin/idea.png
+Icon=/opt/idea-IC-171.4694.23/bin/idea.png
 Categories=Development;IDE;Java;
 EOF'
 sudo chmod 644 /usr/share/applications/intellij.desktop
@@ -161,32 +161,30 @@ sudo chown root:root /usr/share/applications/intellij.desktop
 # IntelliJ Settings
 cd /home/ubuntu
 wget https://s3.amazonaws.com/howarddeiner/provision-intellij-settings.tar
-tar -xvf provision-intellij-settings.tar
+tar -xf provision-intellij-settings.tar
 
 # IntelliJ Class Project
 mkdir /home/ubuntu/IdeaProjects
 cd /home/ubuntu/IdeaProjects
 wget https://s3.amazonaws.com/howarddeiner/rpn-calculator.tar
-tar -xvf rpn-calculator.tar
+tar -xf rpn-calculator.tar
 mkdir /home/ubuntu/.m2
 cd /home/ubuntu/.m2
 wget https://s3.amazonaws.com/howarddeiner/m2-repository.tar
-tar -xvf m2-repository.tar
-
+tar -xf m2-repository.tar
 
 # Port forward 8080 requests to 80
-sudo apt-get remove -y iptables-persistent
+sudo apt-get remove -yqq iptables-persistent
 sudo iptables -I INPUT 1 -p tcp --dport 8080 -j ACCEPT
 sudo iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
 sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080
 sudo sh -c "iptables-save > /etc/iptables.rules"
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -y iptables-persistent
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -yqq iptables-persistent
 
 # Cleanup
 rm -rf /home/ubuntu/guacamole-server-0.9.12-incubating.tar.gz
-rm -rf /home/ubuntu/ideaIC-2017.1.1.tar.gz
 rm -rf /home/ubuntu/guacamole-server-0.9.12-incubating
 rm -rf /home/ubuntu/provision-intellij-settings.tar
-rm -rf /home/ubuntu/IdeaProjects/rpn-calculator.tar
+rm -rf /home/ubuntu/ideaIC-2017.1.4.tar.gz
 rm -rf /home/ubuntu/.m2/m2-repository.tar
