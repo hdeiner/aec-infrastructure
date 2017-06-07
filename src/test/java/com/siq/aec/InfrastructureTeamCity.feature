@@ -12,4 +12,4 @@ Feature: Agile Engineering Course Infrastructure as Code for TeamCity Machine
 
     Examples:
       |aecTeamCityInstance                        |
-|ec2-34-201-37-236.compute-1.amazonaws.com|
+|ec2-54-237-229-170.compute-1.amazonaws.com|

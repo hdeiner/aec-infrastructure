@@ -15,6 +15,8 @@ public class CreateFeatureFiles {
     public static void main(String[] args) throws IOException {
         String studentTemplateFile = "InfrastructureStudent.feature.template";
         String studentFeatureFile = "src/test/java/com/siq/aec/InfrastructureStudent.feature";
+        String bambooTemplateFile = "InfrastructureBamboo.feature.template";
+        String bambooFeatureFile = "src/test/java/com/siq/aec/InfrastructureBamboo.feature";
         String teamcityTemplateFile = "InfrastructureTeamCity.feature.template";
         String teamcityFeatureFile = "src/test/java/com/siq/aec/InfrastructureTeamCity.feature";
         String jenkinsTemplateFile = "InfrastructureJenkins.feature.template";
@@ -23,6 +25,7 @@ public class CreateFeatureFiles {
         String gitlabFeatureFile = "src/test/java/com/siq/aec/InfrastructureGitlab.feature";
 
         writeFeatureFileFromTemplate(studentTemplateFile, studentFeatureFile, "student_addresses");
+        writeFeatureFileFromTemplate(bambooTemplateFile, bambooFeatureFile, "bamboo_address");
         writeFeatureFileFromTemplate(teamcityTemplateFile, teamcityFeatureFile, "teamcity_address");
         writeFeatureFileFromTemplate(jenkinsTemplateFile, jenkinsFeatureFile, "jenkins_address");
         writeFeatureFileFromTemplate(gitlabTemplateFile, gitlabFeatureFile, "gitlab_address");

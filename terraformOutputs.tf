@@ -10,6 +10,14 @@ output "student_ips" {
   value = ["${aws_instance.ec2_aec_student.*.public_ip}"]
 }
 
+output "bamboo_address" {
+  value = ["${aws_instance.ec2_aec_bamboo.*.public_dns}"]
+}
+
+output "bamboo_ip" {
+  value = ["${aws_instance.ec2_aec_bamboo.*.public_ip}"]
+}
+
 output "teamcity_address" {
   value = ["${aws_instance.ec2_aec_teamcity.*.public_dns}"]
 }
