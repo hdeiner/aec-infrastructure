@@ -117,7 +117,7 @@ sudo bash -c "cat <<EOF >> /etc/init.d/tightvncserver
 # /etc/init.d/tightvncserver
   case "\\\$1" in
   start)
-    sudo -u ubuntu /usr/bin/tightvncserver :1 -geometry 1280x720 -depth 16
+    sudo -u ubuntu /usr/bin/tightvncserver :1 -geometry 1280x768 -depth 16
     echo 'Starting TightVNC server'
     ;;
   stop)
