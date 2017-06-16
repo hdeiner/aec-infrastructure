@@ -158,21 +158,11 @@ EOF'
 sudo chmod 644 /usr/share/applications/intellij.desktop
 sudo chown root:root /usr/share/applications/intellij.desktop
 
-# IntelliJ Settings
-cd /home/ubuntu
-wget https://s3.amazonaws.com/howarddeiner/provision-intellij-settings.tar
-tar -xf provision-intellij-settings.tar
-
-# IntelliJ Class Project
-mkdir /home/ubuntu/IdeaProjects
-cd /home/ubuntu/IdeaProjects
-wget https://s3.amazonaws.com/howarddeiner/rpn-calculator.tar
-tar -xf rpn-calculator.tar
-mkdir /home/ubuntu/.m2
-cd /home/ubuntu/.m2
-wget https://s3.amazonaws.com/howarddeiner/m2-repository.tar
-tar -xf m2-repository.tar
-
+# Preset the ubuntu user
+cd /tmp
+wget https://s3.amazonaws.com/howarddeiner/provisionUbuntuUser.tar
+tar -xf provisionUbuntuUser.tar -C /
+IncludeInclud
 # Port forward 8080 requests to 80
 sudo apt-get remove -yqq iptables-persistent
 sudo iptables -I INPUT 1 -p tcp --dport 8080 -j ACCEPT
@@ -185,6 +175,5 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -yqq iptables-persistent
 # Cleanup
 rm -rf /home/ubuntu/guacamole-server-0.9.12-incubating.tar.gz
 rm -rf /home/ubuntu/guacamole-server-0.9.12-incubating
-rm -rf /home/ubuntu/provision-intellij-settings.tar
 rm -rf /home/ubuntu/ideaIC-2017.1.4.tar.gz
-rm -rf /home/ubuntu/.m2/m2-repository.tar
+rm -rf /tmp/provisionUbuntuUser.tar
