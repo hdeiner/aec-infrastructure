@@ -12,4 +12,4 @@ Feature: Agile Engineering Course Infrastructure as Code for Bamboo Machine
 
     Examples:
       |aecBambooInstance                        |
-|ec2-52-204-24-216.compute-1.amazonaws.com|
+|ec2-54-174-84-140.compute-1.amazonaws.com|

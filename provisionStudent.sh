@@ -162,7 +162,7 @@ sudo chown root:root /usr/share/applications/intellij.desktop
 cd /tmp
 wget https://s3.amazonaws.com/howarddeiner/provisionUbuntuUser.tar
 tar -xf provisionUbuntuUser.tar -C /
-IncludeInclud
+
 # Port forward 8080 requests to 80
 sudo apt-get remove -yqq iptables-persistent
 sudo iptables -I INPUT 1 -p tcp --dport 8080 -j ACCEPT
