@@ -1,5 +1,5 @@
 resource "aws_instance" "ec2_aec_teamcity" {
-  count = 1
+  count = 3
   ami = "ami-80861296"
   instance_type = "m4.large"
   key_name = "${aws_key_pair.aec_key_pair.key_name}"

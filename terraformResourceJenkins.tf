@@ -1,5 +1,5 @@
 resource "aws_instance" "ec2_aec_jenkins" {
-  count = 1
+  count = 3
   ami = "ami-80861296"
   instance_type = "t2.micro"
   key_name = "${aws_key_pair.aec_key_pair.key_name}"
