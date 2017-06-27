@@ -21,6 +21,6 @@ resource "aws_instance" "ec2_aec_jenkins" {
     inline = ["sudo reboot now"]
   }
   tags {
-    Name = "Agile Engineering Class Jenkins"
+    Name = "Agile Engineering Class Jenkins ${format("%03d", count.index)}"
   }
 }

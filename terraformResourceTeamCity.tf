@@ -21,6 +21,7 @@ resource "aws_instance" "ec2_aec_teamcity" {
     inline = ["sudo reboot now"]
   }
   tags {
-    Name = "Agile Engineering Class TeamCity"
+    Name = "Agile Engineering Class TeamCity ${format("%03d", count.index)}"
+
   }
 }

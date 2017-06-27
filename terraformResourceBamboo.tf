@@ -21,6 +21,6 @@ resource "aws_instance" "ec2_aec_bamboo" {
     inline = ["sudo reboot now"]
   }
   tags {
-    Name = "Agile Engineering Class Bamboo"
+    Name = "Agile Engineering Class Bamboo ${format("%03d", count.index)}"
   }
 }

@@ -21,6 +21,6 @@ resource "aws_instance" "ec2_aec_gitlab" {
     inline = ["sudo reboot now"]
   }
   tags {
-    Name = "Agile Engineering Class GitLab"
+    Name = "Agile Engineering Class GitLab ${format("%03d", count.index)}"
   }
 }
