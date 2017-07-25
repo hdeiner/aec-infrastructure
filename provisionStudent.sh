@@ -161,7 +161,7 @@ sudo chown root:root /usr/share/applications/intellij.desktop
 # Preset the ubuntu user
 cd /tmp
 wget https://s3.amazonaws.com/howarddeiner/provisionUbuntuUser.tar
-tar -xf provisionUbuntuUser.tar -C /
+tar --exclude='.ssh' -xf provisionUbuntuUser.tar -C /
 
 # Port forward 8080 requests to 80
 sudo apt-get remove -yqq iptables-persistent

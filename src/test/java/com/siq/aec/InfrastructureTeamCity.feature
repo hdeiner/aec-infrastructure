@@ -12,6 +12,6 @@ Feature: Agile Engineering Course Infrastructure as Code for TeamCity Machine
 
     Examples:
       |aecTeamCityInstance                        |
-|ec2-34-227-60-186.compute-1.amazonaws.com|
-|ec2-174-129-47-163.compute-1.amazonaws.com|
-|ec2-107-20-24-6.compute-1.amazonaws.com|
+|ec2-54-174-169-28.compute-1.amazonaws.com|
+|ec2-52-204-160-22.compute-1.amazonaws.com|
+|ec2-34-227-191-5.compute-1.amazonaws.com|
