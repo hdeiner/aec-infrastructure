@@ -266,3 +266,42 @@ aws_security_group.aec_sg_jenkins: Destruction complete
 
 Destroy complete! Resources: 9 destroyed.
 ```
+
+```
+
+# Running with Dockerfile
+
+1. Build the image
+```
+docker build -t aec .
+```
+2. Start Container & Get shell
+```
+docker run -it aec bash
+```
+3. Generate an ssh key (this is used to connect via ssh)
+```
+ssh-keygen -t rsa
+```
+* accept defaults (hit return 3 times)
+4. Setup your aws-cli
+* You'll need to enter your AWS ACCESS KEY ID AND AWS SECRET ACCESS KEY 
+* Use us-east-1
+* Set output to json
+```
+aws configure
+```
+```
+terraform init
+```
+```
+terraform apply
+```
+5. Test everything
+```
+mvn
+```
+6. Destroy (must type yes)
+```
+terraform destroy
+```

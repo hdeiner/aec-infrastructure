@@ -35,7 +35,7 @@ public class Stepdefs {
     }
 
     private List<String> runShellCommand(String[] command) throws IOException {
-        List<String> output = new ArrayList<String>();
+        List<String> output = new ArrayList<>();
 
         Process p = Runtime.getRuntime().exec(command);
 
@@ -65,7 +65,7 @@ public class Stepdefs {
     }
 
     private boolean isPortOpen(String portNumber) throws IOException {
-        String[] cmd = {"/usr/local/bin/nmap", machineName, "-p", portNumber};
+        String[] cmd = {"nmap", machineName, "-p", portNumber};
         List<String> nmapResults = runShellCommand(cmd);
         boolean result = false;
         for (String s : nmapResults) {
