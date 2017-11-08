@@ -73,7 +73,9 @@ To test, from the command line, enter
 mvn
 ```
 8. Cucumber feature files will be built in the validate exec:java phase and run in the test phase.  You should see things like the following in response to your "mvn" command:
+
 ```
+
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
@@ -267,7 +269,7 @@ aws_security_group.aec_sg_jenkins: Destruction complete
 Destroy complete! Resources: 9 destroyed.
 ```
 
-```
+
 
 # Running with Dockerfile
 
