@@ -177,3 +177,6 @@ rm -rf /home/ubuntu/guacamole-server-0.9.12-incubating.tar.gz
 rm -rf /home/ubuntu/guacamole-server-0.9.12-incubating
 rm -rf /home/ubuntu/ideaIC-2017.1.4.tar.gz
 rm -rf /tmp/provisionUbuntuUser.tar
+
+cd ~
+git clone https://github.com/jamesbyars/aec-calculator.git
