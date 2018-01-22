@@ -73,7 +73,9 @@ To test, from the command line, enter
 mvn
 ```
 8. Cucumber feature files will be built in the validate exec:java phase and run in the test phase.  You should see things like the following in response to your "mvn" command:
+
 ```
+
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
@@ -265,4 +267,43 @@ aws_key_pair.aec_key_pair: Destruction complete
 aws_security_group.aec_sg_jenkins: Destruction complete
 
 Destroy complete! Resources: 9 destroyed.
+```
+
+
+
+# Running with Dockerfile
+
+1. Build the image
+```
+docker build -t aec .
+```
+2. Start Container & Get shell
+```
+docker run -it aec bash
+```
+3. Generate an ssh key (this is used to connect via ssh)
+```
+ssh-keygen -t rsa
+```
+* accept defaults (hit return 3 times)
+4. Setup your aws-cli
+* You'll need to enter your AWS ACCESS KEY ID AND AWS SECRET ACCESS KEY 
+* Use us-east-1
+* Set output to json
+```
+aws configure
+```
+```
+terraform init
+```
+```
+terraform apply
+```
+5. Test everything
+```
+mvn
+```
+6. Destroy (must type yes)
+```
+terraform destroy
 ```

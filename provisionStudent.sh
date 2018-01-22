@@ -18,11 +18,11 @@ sudo echo "GUACAMOLE_HOME=/etc/guacamole" >> /etc/default/tomcat8
 SERVER=$(curl -s 'https://www.apache.org/dyn/closer.cgi?as_json=1' | jq --raw-output '.preferred|rtrimstr("/")')
 
 # Download Guacamole Files from Preferred Mirror
-wget $SERVER/incubator/guacamole/0.9.12-incubating/source/guacamole-server-0.9.12-incubating.tar.gz
-wget $SERVER/incubator/guacamole/0.9.12-incubating/binary/guacamole-0.9.12-incubating.war
+wget $SERVER/guacamole/0.9.14/source/guacamole-server-0.9.14.tar.gz
+wget $SERVER/guacamole/0.9.14/binary/guacamole-0.9.14.war
 
 #Extract Guacamole
-tar -xzf guacamole-server-0.9.12-incubating.tar.gz
+tar -xzf guacamole-server-0.9.14.tar.gz
 
 # MAKE DIRECTORIES
 sudo mkdir /etc/guacamole
@@ -54,7 +54,7 @@ sudo bash -c 'cat <<EOF >> /etc/guacamole/user-mapping.xml
 EOF'
 
 # Install GUACD
-cd guacamole-server-0.9.12-incubating
+cd guacamole-server-0.9.14
 ./configure --with-init-dir=/etc/init.d
 make
 sudo make install
@@ -63,7 +63,7 @@ sudo systemctl enable guacd
 cd ..
 
 # Move files to correct locations
-sudo mv guacamole-0.9.12-incubating.war /etc/guacamole/guacamole.war
+sudo mv guacamole-0.9.14.war /etc/guacamole/guacamole.war
 sudo ln -s /etc/guacamole/guacamole.war /var/lib/tomcat8/webapps/
 sudo rm -rf /var/lib/tomcat8/webapps/ROOT
 sudo mv /var/lib/tomcat8/webapps/guacamole.war /var/lib/tomcat8/webapps/ROOT.war
@@ -140,19 +140,19 @@ sudo apt-get -yqq install eclipse
 
 # Install IntelliJ
 sudo apt-get -yqq install default-jdk
-wget https://download.jetbrains.com/idea/ideaIC-2017.1.4.tar.gz
-sudo tar -xf ideaIC-2017.1.4.tar.gz -C /opt/
-sudo ln -s /opt/idea-IC-171.4694.23/bin/idea.sh /usr/local/sbin/intellij
+wget https://download.jetbrains.com/idea/ideaIC-2017.3.3.tar.gz
+sudo tar -xf ideaIC-2017.3.3.tar.gz -C /opt/
+sudo ln -s /opt/idea*/bin/idea.sh /usr/local/sbin/intellij
 sudo bash -c 'cat <<EOF >> /usr/share/applications/intellij.desktop
 [Desktop Entry]
-Version=IntelliJ IDEA 2017.1.4
+Version=IntelliJ IDEA 2017.3.3
 Type=Application
 Terminal=false
-Icon[en-US]=/opt/idea-IC-171.4694.23/bin/idea.png
+Icon[en-US]=/opt/idea-*/bin/idea.png
 Name[en-US]=IntelliJ
-Exec=/opt/idea-IC-171.4694.23/bin/idea.sh
+Exec=/opt/idea-*/bin/idea.sh
 Name=IntelliJ
-Icon=/opt/idea-IC-171.4694.23/bin/idea.png
+Icon=/opt/idea-*/bin/idea.png
 Categories=Development;IDE;Java;
 EOF'
 sudo chmod 644 /usr/share/applications/intellij.desktop
@@ -177,3 +177,6 @@ rm -rf /home/ubuntu/guacamole-server-0.9.12-incubating.tar.gz
 rm -rf /home/ubuntu/guacamole-server-0.9.12-incubating
 rm -rf /home/ubuntu/ideaIC-2017.1.4.tar.gz
 rm -rf /tmp/provisionUbuntuUser.tar
+
+cd ~
+git clone https://github.com/jamesbyars/aec-calculator.git

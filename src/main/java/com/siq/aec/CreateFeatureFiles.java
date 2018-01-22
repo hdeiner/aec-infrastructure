@@ -32,7 +32,7 @@ public class CreateFeatureFiles {
     }
 
     private static void writeFeatureFileFromTemplate(String templateFile, String featureFile, String whichAddresses) throws IOException {
-        String[] cmd = {"/usr/local/bin/terraform", "output", whichAddresses};
+        String[] cmd = {"terraform", "output", whichAddresses};
         List<String> instances = runShellCommand(cmd);
 
         Files.copy(Paths.get(templateFile), new FileOutputStream(featureFile));
@@ -46,7 +46,7 @@ public class CreateFeatureFiles {
     }
 
     private static List<String> runShellCommand(String[] command) throws IOException {
-        List<String> output = new ArrayList<String>();
+        List<String> output = new ArrayList<>();
 
         Process p = Runtime.getRuntime().exec(command);
 
