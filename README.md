@@ -281,18 +281,14 @@ docker build -t aec .
 ```
 docker run -it aec bash
 ```
-3. Generate an ssh key (this is used to connect via ssh)
-```
-ssh-keygen -t rsa
-```
-* accept defaults (hit return 3 times)
-4. Setup your aws-cli
+3. Setup your aws-cli
 * You'll need to enter your AWS ACCESS KEY ID AND AWS SECRET ACCESS KEY 
 * Use us-east-1
 * Set output to json
 ```
 aws configure
 ```
+4. Initialize & Run the Terraform scripts
 ```
 terraform init
 ```
