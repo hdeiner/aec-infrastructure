@@ -29,4 +29,6 @@ RUN curl -O https://releases.hashicorp.com/terraform/0.10.8/terraform_0.10.8_lin
 RUN unzip terraform*zip
 RUN echo 'export PATH=$PATH:/root/data' > /root/.bashrc
 
+RUN echo | ssh-keygen -t rsa -P ''
+
 WORKDIR /root/data/aec-infrastructure
