@@ -11,7 +11,7 @@ Feature: Agile Engineering Course Infrastructure as Code for Student Machines
     And port "80" should be open
 
     Examples:
-      |aecStudentInstance                        |
+      |aecStudentInstance                       |
 |ec2-34-207-185-188.compute-1.amazonaws.com|
 |ec2-34-224-7-168.compute-1.amazonaws.com|
 |ec2-34-230-10-151.compute-1.amazonaws.com|
